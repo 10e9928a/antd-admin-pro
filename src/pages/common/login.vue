@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { AlipayCircleFilled, LockOutlined, MobileOutlined, TaobaoCircleFilled, UserOutlined, WeiboCircleFilled } from '@ant-design/icons-vue'
+import { LockOutlined, MobileOutlined, UserOutlined } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue/es'
 
 const router = useRouter()
+const route = useRoute()
 const userStore = useUserStore()
 
 const loginModel = reactive({
@@ -30,7 +31,7 @@ const { counter, pause, reset, resume, isActive } = useInterval(1000, {
   },
 })
 
-const getCode = async () => {
+async function getCode() {
   codeLoading.value = true
   try {
     await formRef.value.validate(['mobile'])
@@ -45,12 +46,12 @@ const getCode = async () => {
 
     codeLoading.value = false
   }
-  catch (error) {
+  catch {
     codeLoading.value = false
   }
 }
 
-const submit = async () => {
+async function submit() {
   submitLoading.value = true
   errorAlert.value = false
   try {
@@ -73,15 +74,14 @@ const submit = async () => {
     }
 
     if (result.success) {
-      // 登录成功，跳转到首页
-      setTimeout(() => {
-        router.push('/')
-      }, 500)
+      // 登录成功，跳转到重定向地址或首页
+      const redirect = route.query.redirect as string
+      router.push(redirect || '/')
     }
 
     submitLoading.value = false
   }
-  catch (e) {
+  catch {
     errorAlert.value = true
     submitLoading.value = false
   }
@@ -95,15 +95,9 @@ const submit = async () => {
         <!-- 登录头部 -->
         <div class="flex-between h-15 px-4 mb-[2px]">
           <div class="flex items-center">
-            <span class="ant-pro-form-login-logo">
-              <!-- <img w-full h-full object-cover src="/logo.svg" alt="logo"> -->
-            </span>
             <span class="ant-pro-form-login-title">
               Admin Pro
             </span>
-            <!-- <span class="ant-pro-form-login-desc">
-              Ant Design Vue Pro
-            </span> -->
           </div>
         </div>
         <a-divider m-0 />
@@ -242,14 +236,6 @@ const submit = async () => {
                 登录
               </a-button>
             </a-form>
-            <a-divider>
-              <span class="text-slate-500">其他登录方式</span>
-            </a-divider>
-            <div class="ant-pro-form-login-other">
-              <AlipayCircleFilled class="icon" />
-              <TaobaoCircleFilled class="icon" />
-              <WeiboCircleFilled class="icon" />
-            </div>
           </div>
         </div>
       </div>
@@ -296,19 +282,6 @@ const submit = async () => {
   line-height: 1;
 }
 
-.ant-pro-form-login-logo {
-  width: 44px;
-  height: 44px;
-  margin-right: 16px;
-  vertical-align: top;
-}
-
-.ant-pro-form-login-desc {
-  color: var(--text-color-1);
-  font-size: 14px;
-  margin-left: 16px;
-}
-
 .ant-pro-form-login-main {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   background: var(--bg-color-container);
@@ -351,11 +324,6 @@ const submit = async () => {
     font-size: 16px;
   }
 
-  .ant-pro-form-login-other {
-    line-height: 22px;
-    text-align: center;
-  }
-
   :deep(.ant-form) {
     width: 100%;
   }
@@ -371,19 +339,6 @@ const submit = async () => {
   }
 }
 
-.icon {
-  margin-left: 8px;
-  color: var(--text-color-2);
-  font-size: 24px;
-  vertical-align: middle;
-  cursor: pointer;
-  transition: color 0.3s;
-
-  &:hover {
-    color: #1890ff;
-  }
-}
-
 .login-media(@width: 100%) {
   .ant-pro-form-login-main {
     width: @width;
@@ -393,9 +348,6 @@ const submit = async () => {
   }
   .ant-pro-form-login-main-right {
     width: 100%;
-  }
-  .ant-pro-form-login-desc {
-    display: none;
   }
 }
 

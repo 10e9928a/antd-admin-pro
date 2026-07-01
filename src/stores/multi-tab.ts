@@ -1,7 +1,7 @@
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import { message } from 'ant-design-vue/es'
-import router from '@/router'
 import { MULTI_TAB_CONFIG } from '@/config'
+import router from '@/router'
 
 export interface MultiTabItem {
   path: string

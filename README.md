@@ -1,122 +1,89 @@
-# Antd Admin Pro 平台
+# Antd Admin Pro
 
-基于 Vue 3 + Ant Design Vue 4 + TypeScript 构建的现代化后台管理系统。
+基于 Vue 3 + Ant Design Vue 4 + TypeScript + Vite 的轻量后台管理平台模板，开箱即用，可作为中后台项目的起点。
 
 ## ✨ 特性
 
-- 🚀 **最新技术栈**：使用 Vue 3、Vite 4、TypeScript 等前沿技术
-- 🎨 **Ant Design Vue**：基于 Ant Design Vue 4.x 组件库
-- 📦 **状态管理**：使用 Pinia 进行状态管理
-- 🔧 **自动导入**：自动导入组件和 Composition API
-- 🎯 **TypeScript**：完整的 TypeScript 支持
+- 🚀 **最新技术栈**：Vue 3.5 / Vite 8 / TypeScript 6
+- 🎨 **Ant Design Vue 4**：企业级 UI 组件库，支持暗色主题与主题色定制
+- 📦 **Pinia** 状态管理 + **Vue Router 5** 路由
+- 🔧 **自动导入**：组件与 Composition API 自动导入，无需手动 import
+- 🔐 **登录鉴权**：内置基于 Token 的路由守卫与登录流程
+- 🗂️ **多标签页**：支持标签页导航、刷新、关闭
 - 🌈 **UnoCSS**：原子化 CSS 引擎
-- 🔨 **Mock 数据**：内置 Mock 数据支持
-- 📱 **响应式**：支持多端适配
+- 🔨 **Mock 数据**：内置 vite-plugin-mock，前端可独立联调
 
 ## 📦 技术栈
 
-- **框架**：Vue 3.4+
-- **构建工具**：Vite 4.3+
-- **UI 组件库**：Ant Design Vue 4.2+
-- **状态管理**：Pinia 2.1+
-- **路由**：Vue Router 4.4+
-- **HTTP 请求**：Axios 1.7+
-- **CSS 引擎**：UnoCSS 0.51+
-- **开发语言**：TypeScript 5.0+
-- **包管理器**：pnpm 9.5+
+| 分类 | 技术 |
+| --- | --- |
+| 框架 | Vue 3.5 |
+| 构建 | Vite 8 |
+| UI | Ant Design Vue 4.2 |
+| 状态管理 | Pinia 3 |
+| 路由 | Vue Router 5 |
+| 请求 | Axios 1.x |
+| CSS | UnoCSS 66 |
+| 语言 | TypeScript 6 |
+| 代码规范 | ESLint 10 + @antfu/eslint-config |
+| 包管理 | pnpm |
 
 ## 📁 项目结构
 
 ```
-antdv_pro/
+antd-admin-pro/
 ├── src/
-│   ├── api/              # API 接口
-│   ├── assets/           # 静态资源
-│   ├── components/       # 通用组件
-│   ├── composables/      # 组合式函数
-│   ├── config/           # 配置文件
-│   ├── layouts/          # 布局组件
-│   ├── pages/            # 页面组件
-│   ├── router/           # 路由配置
-│   ├── stores/           # 状态管理
-│   ├── utils/            # 工具函数
-│   ├── App.vue           # 根组件
-│   └── main.ts           # 入口文件
-├── mock/                 # Mock 数据
-├── public/               # 公共资源
-├── types/                # 类型声明
-├── deploy/               # 部署配置
-└── dist/                 # 构建产物
-
+│   ├── api/          # API 接口与类型
+│   ├── assets/       # 静态资源与全局样式
+│   ├── components/   # 通用组件
+│   ├── composables/  # 组合式函数
+│   ├── config/       # 常量与默认配置
+│   ├── layouts/      # 布局（侧边栏 / 头部 / 多标签）
+│   ├── pages/        # 页面
+│   ├── router/       # 路由与鉴权守卫
+│   ├── stores/       # Pinia 状态
+│   ├── utils/        # 工具（请求 / 存储）
+│   ├── App.vue
+│   └── main.ts
+├── mock/             # Mock 接口
+├── public/           # 公共资源
+├── types/            # 类型声明
+└── deploy/           # 部署配置（nginx）
 ```
 
 ## 🚀 快速开始
 
-### 环境要求
-
-- Node.js >= 16
-- pnpm >= 9.5
-
-### 安装依赖
-
 ```bash
+# 安装依赖
 pnpm install
-```
 
-### 启动开发服务器
-
-```bash
+# 启动开发服务器（默认 http://localhost:6678）
 pnpm dev
-```
 
-访问 http://localhost:6678
-
-### 构建生产版本
-
-```bash
+# 构建生产版本
 pnpm build
-```
 
-### 预览构建产物
-
-```bash
+# 预览构建产物
 pnpm preview
-```
 
-### 代码检查
-
-```bash
+# 代码检查并修复
 pnpm lint
 ```
 
-## 🔧 配置说明
+## 🔐 默认账号（Mock）
 
-### 开发服务器配置
+| 登录方式 | 账号 | 密码 / 验证码 |
+| --- | --- | --- |
+| 账号密码 | `admin` | `admin123` |
+| 账号密码 | `user` | `user123` |
+| 手机号 | `13800138000` | `123456` |
 
-- 默认端口：6678
-- 配置文件：`vite.config.ts`
+## 🧩 关键约定
 
-### 路由配置
-
-路由配置位于 `src/router/` 目录：
-- `index.ts` - 路由实例
-- `static-routes.ts` - 静态路由配置
-- `router-guard.ts` - 路由守卫
-
-### 状态管理
-
-使用 Pinia 进行状态管理，Store 文件位于 `src/stores/` 目录：
-- `app.ts` - 应用配置
-- `user.ts` - 用户信息
-- `layout-menu.ts` - 菜单管理
-- `multi-tab.ts` - 多标签页管理
-
-## 📝 开发规范
-
-- 使用 ESLint 进行代码规范检查
-- 使用 TypeScript 进行类型检查
-- 组件和 API 自动导入，无需手动 import
-- 使用 Composition API 编写组件
+- **路由即菜单**：菜单由 `src/router/static-routes.ts` 中的路由自动生成，通过 `meta` 控制标题、图标、缓存、是否在菜单/页签中隐藏等。
+- **鉴权**：`src/router/router-guard.ts` 基于 Token 做前置守卫，未登录访问受保护页面会重定向到登录页。
+- **请求**：`src/utils/request.ts` 统一封装 Axios，含 Token 注入与统一错误处理；接口按模块放在 `src/api/modules/`。
+- **环境变量**：见 `.env` / `.env.development` / `.env.production`，`VITE_APP_BASE_API` 为接口基础地址。
 
 ## 📄 License
 

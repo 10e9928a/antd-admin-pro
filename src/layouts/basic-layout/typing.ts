@@ -31,7 +31,7 @@ export interface MenuDataItem {
   target?: '_blank' | '_self' | '_parent'
 }
 
-export interface MenuSelectEvent { item: any; key: string; selectedKeys: string[] }
+export interface MenuSelectEvent { item: any, key: string, selectedKeys: string[] }
 
 const proLayoutEvents = {
   'onUpdate:openKeys': eventType<(val: string[]) => void>(),

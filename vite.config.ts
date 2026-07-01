@@ -1,12 +1,11 @@
-import { fileURLToPath } from 'url'
-import { defineConfig } from 'vite'
+import { fileURLToPath } from 'node:url'
 import vue from '@vitejs/plugin-vue'
-import vueJsx from '@vitejs/plugin-vue-jsx'
-import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
 import Unocss from 'unocss/vite'
+import AutoImport from 'unplugin-auto-import/vite'
+import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
+import Components from 'unplugin-vue-components/vite'
+import { defineConfig } from 'vite'
 import { viteMockServe } from 'vite-plugin-mock'
-import AntdvResolver from 'antdv-component-resolver'
 
 const baseSrc = fileURLToPath(new URL('./src', import.meta.url))
 
@@ -15,14 +14,17 @@ export default defineConfig(({ command }) => ({
 
   plugins: [
     vue(),
-    vueJsx(),
     AutoImport({
-      imports: ['vue', 'vue-router', 'vue-i18n', '@vueuse/core', 'pinia'],
+      imports: ['vue', 'vue-router', '@vueuse/core', 'pinia'],
       dts: 'types/auto-imports.d.ts',
       dirs: ['src/stores', 'src/composables'],
+      eslintrc: {
+        enabled: true,
+        filepath: 'types/.eslintrc-auto-import.json',
+      },
     }),
     Components({
-      resolvers: [AntdvResolver()],
+      resolvers: [AntDesignVueResolver({ importStyle: false, resolveIcons: true })],
       dts: 'types/components.d.ts',
       dirs: ['src/components'],
     }),
@@ -31,30 +33,26 @@ export default defineConfig(({ command }) => ({
       mockPath: 'mock',
       enable: command === 'serve',
       watchFiles: true,
-      logger: true,
     }),
   ],
 
   resolve: {
-    alias: [
-      { find: /^ant-design-vue\/es$/, replacement: 'ant-design-vue/es' },
-      { find: /^ant-design-vue\/dist$/, replacement: 'ant-design-vue/dist' },
-      { find: /^ant-design-vue\/lib$/, replacement: 'ant-design-vue/es' },
-      { find: /^ant-design-vue$/, replacement: 'ant-design-vue/es' },
-      { find: 'lodash', replacement: 'lodash-es' },
-      { find: '~@', replacement: baseSrc },
-      { find: '~', replacement: baseSrc },
-      { find: '@', replacement: baseSrc },
-    ],
+    alias: {
+      '@': baseSrc,
+      '~': baseSrc,
+    },
   },
 
   build: {
     chunkSizeWarningLimit: 4096,
     rollupOptions: {
       output: {
-        manualChunks: {
-          vue: ['vue', 'vue-router', 'pinia', '@vueuse/core'],
-          antd: ['ant-design-vue', '@ant-design/icons-vue'],
+        manualChunks(id) {
+          if (!id.includes('node_modules'))
+            return
+          if (id.includes('ant-design-vue') || id.includes('@ant-design'))
+            return 'antd'
+          return 'vendor'
         },
       },
     },

@@ -2,15 +2,10 @@
 const userStore = useUserStore()
 const router = useRouter()
 
-const currentTime = ref('')
+// useNow 会在组件卸载时自动清理定时器，避免内存泄漏
+const currentTime = useDateFormat(useNow(), 'YYYY-MM-DD HH:mm:ss')
 
-// 更新当前时间
-const updateTime = () => {
-  currentTime.value = new Date().toLocaleString()
-}
-
-// 刷新用户信息
-const refreshUserInfo = async () => {
+async function refreshUserInfo() {
   try {
     await userStore.getUserInfo()
   }
@@ -19,18 +14,10 @@ const refreshUserInfo = async () => {
   }
 }
 
-// 退出登录
-const handleLogout = async () => {
+async function handleLogout() {
   await userStore.logout()
   router.push('/login')
 }
-
-// 初始化
-onMounted(() => {
-  updateTime()
-  // 每秒更新时间
-  setInterval(updateTime, 1000)
-})
 </script>
 
 <template>

@@ -1,13 +1,9 @@
-import { isUrl } from '@v-c/utils'
 import type { MenuData, MenuDataItem } from '@/layouts/basic-layout/typing'
+import { isUrl } from '@v-c/utils'
 import router from '@/router'
 
 // 递归映射菜单数据
-const buildMenuDataMap = (
-  menuData: MenuData,
-  menuDataMap: Map<string, MenuDataItem>,
-  matched: MenuDataItem[] = [],
-) => {
+function buildMenuDataMap(menuData: MenuData, menuDataMap: Map<string, MenuDataItem>, matched: MenuDataItem[] = []) {
   menuData.forEach((item) => {
     menuDataMap.set(item.path, { ...item, matched })
     if (item.children?.length)

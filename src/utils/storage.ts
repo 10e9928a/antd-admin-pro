@@ -4,7 +4,7 @@
  */
 
 // 存储错误处理
-const handleStorageError = (operation: string, key: string, error: any) => {
+function handleStorageError(operation: string, key: string, error: any) {
   console.error(`Storage ${operation} error for key "${key}":`, error)
   return null
 }

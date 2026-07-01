@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import Header from '../components/header/index.vue'
 import SiderMenu from '../components/sider-menu/index.vue'
-import { proLayoutProps } from './typing'
 import { useLayoutProvider } from './context'
+import { proLayoutProps } from './typing'
+
 const props = defineProps(proLayoutProps)
 const emit = defineEmits(['update:collapsed'])
 
-const handleCollapsed = (collapsed: boolean) => {
+function handleCollapsed(collapsed: boolean) {
   emit('update:collapsed', collapsed)
   props?.onCollapsed?.(collapsed)
 }
@@ -27,7 +28,7 @@ useLayoutProvider(props, {
           </template>
         </Header>
         <slot name="contentPrefix" />
-        <a-layout-content ref="layoutRef" class="ant-pro-basicLayout-content" flex flex-col>
+        <a-layout-content class="ant-pro-basicLayout-content" flex flex-col>
           <div h-full flex flex-col flex-1 w-full>
             <slot />
           </div>

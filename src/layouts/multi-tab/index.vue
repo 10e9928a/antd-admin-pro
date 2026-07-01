@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { CSSProperties } from 'vue'
 import { CloseOutlined, ReloadOutlined } from '@ant-design/icons-vue'
+
 const multiTabStore = useMultiTab()
 const { list, activeKey } = storeToRefs(multiTabStore)
 const { layoutSetting } = storeToRefs(useAppStore())
@@ -15,6 +16,9 @@ const tabStyle = computed<CSSProperties>(() => {
 })
 const tabsRef = shallowRef()
 const { height } = useElementSize(tabsRef)
+
+// a-tabs 回调的 key 类型为 string | number，这里统一转为 string
+const onSwitchTab = (key: string | number) => multiTabStore.switchTab(String(key))
 </script>
 
 <template>
@@ -26,7 +30,7 @@ const { height } = useElementSize(tabsRef)
     :tab-bar-gutter="5"
     :active-key="activeKey"
     class="bg-white dark:bg-#242525 w-100% pt-10px"
-    @update:active-key="multiTabStore.switchTab"
+    @update:active-key="onSwitchTab"
   >
     <a-tab-pane v-for="item in list" :key="item.fullPath">
       <template #tab>

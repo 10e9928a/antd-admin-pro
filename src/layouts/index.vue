@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import BasicLayout from './basic-layout/index.vue'
 import MultiTab from './multi-tab/index.vue'
+
 const appStore = useAppStore()
 const userStore = useUserStore()
 const layoutMenu = useLayoutMenu()

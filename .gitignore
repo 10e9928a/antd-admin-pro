@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Auto-generated
+types/.eslintrc-auto-import.json
+*.tsbuildinfo
+
 # Editor directories and files
 # .vscode/*
 !.vscode/extensions.json

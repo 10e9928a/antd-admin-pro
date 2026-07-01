@@ -1,11 +1,11 @@
 import type { RouteRecordRaw } from 'vue-router'
+import type { MenuData } from '@/layouts/basic-layout/typing'
 import { message } from 'ant-design-vue/es'
 import { apiGetUserInfo, apiLogin, apiLogout, apiMobileLogin, apiSendCode } from '@/api'
-import type { MenuData } from '@/layouts/basic-layout/typing'
-import { storage } from '@/utils'
 import { useAuthorization } from '@/composables/authorization'
 import { STORAGE_KEYS } from '@/config'
 import router from '@/router'
+import { storage } from '@/utils'
 
 // 类型定义
 interface UserInfo {
@@ -46,7 +46,6 @@ export const useUserStore = defineStore('user', () => {
       if (token) {
         const authorization = useAuthorization()
         authorization.value = token
-        storage.set(STORAGE_KEYS.TOKEN, token)
       }
 
       if (responseUserInfo) {
@@ -71,7 +70,7 @@ export const useUserStore = defineStore('user', () => {
   }
 
   // 账号密码登录
-  const login = async (loginData: { username: string; password: string }): Promise<LoginResult> => {
+  const login = async (loginData: { username: string, password: string }): Promise<LoginResult> => {
     try {
       const response = await apiLogin(loginData)
       return handleLoginResponse(response)
@@ -82,7 +81,7 @@ export const useUserStore = defineStore('user', () => {
   }
 
   // 手机号登录
-  const mobileLogin = async (loginData: { mobile: string; code: string }): Promise<LoginResult> => {
+  const mobileLogin = async (loginData: { mobile: string, code: string }): Promise<LoginResult> => {
     try {
       const response = await apiMobileLogin(loginData)
       return handleLoginResponse(response)
@@ -138,7 +137,6 @@ export const useUserStore = defineStore('user', () => {
     })
     const authorization = useAuthorization()
     authorization.value = null
-    storage.remove(STORAGE_KEYS.TOKEN)
     storage.remove(STORAGE_KEYS.USER)
   }
 
@@ -148,7 +146,7 @@ export const useUserStore = defineStore('user', () => {
       await apiLogout()
       message.success('退出成功')
     }
-    catch (error) {
+    catch {
       // 静默处理登出错误
     }
     finally {

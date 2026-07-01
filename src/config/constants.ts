@@ -2,19 +2,15 @@
  * 全局常量配置
  */
 
-// 存储键名
+// 本地存储键名
 export const STORAGE_KEYS = {
-  TOKEN: 'token',
   USER: 'user',
-  THEME: 'theme',
-  LANGUAGE: 'language',
 } as const
 
 // 路由常量
 export const ROUTES = {
   LOGIN: '/login',
   HOME: '/dashboard',
-  REDIRECT: '/redirect',
 } as const
 
 // HTTP 状态码

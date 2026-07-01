@@ -1,10 +1,9 @@
-import Qs from 'qs'
-import axios from 'axios'
-import { notification } from 'ant-design-vue/es'
 import type { AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
-import router from '@/router'
+import { notification } from 'ant-design-vue/es'
+import axios from 'axios'
 import { STORAGE_AUTHORIZE_KEY, useAuthorization } from '@/composables/authorization'
 import { HTTP_STATUS, REQUEST_CONFIG, ROUTES } from '@/config'
+import router from '@/router'
 
 /**
  * 统一响应数据结构
@@ -23,13 +22,14 @@ const { TIMEOUT, ERROR_DURATION } = REQUEST_CONFIG
 const instance = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API ?? '/',
   timeout: TIMEOUT,
-  paramsSerializer: params => Qs.stringify(params, { indices: false }),
+  // 数组参数序列化为 a=1&a=2（axios 内置，无需 qs）
+  paramsSerializer: { indexes: null },
 })
 
 /**
  * 请求拦截器
  */
-const requestHandler = async (config: InternalAxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
+async function requestHandler(config: InternalAxiosRequestConfig): Promise<InternalAxiosRequestConfig> {
   const token = useAuthorization()
   if (token.value)
     config.headers.set(STORAGE_AUTHORIZE_KEY, token.value)
@@ -40,7 +40,7 @@ const requestHandler = async (config: InternalAxiosRequestConfig): Promise<Inter
 /**
  * 响应拦截器 - 成功处理
  */
-const responseHandler = (response: AxiosResponse): any => {
+function responseHandler(response: AxiosResponse): any {
   const { data } = response
 
   // 检查业务状态码，如果是权限相关错误，跳转登录页
@@ -58,7 +58,7 @@ const responseHandler = (response: AxiosResponse): any => {
 /**
  * 处理未授权错误
  */
-const handleUnauthorized = (data: ResponseBody, statusText: string) => {
+function handleUnauthorized(data: ResponseBody, statusText: string) {
   notification.error({
     message: '未授权',
     description: data?.msg || statusText || '登录已过期，请重新登录',
@@ -79,7 +79,7 @@ const handleUnauthorized = (data: ResponseBody, statusText: string) => {
 /**
  * 响应拦截器 - 错误处理
  */
-const errorHandler = (error: AxiosError<ResponseBody>): Promise<never> => {
+function errorHandler(error: AxiosError<ResponseBody>): Promise<never> {
   if (error.response) {
     const { data, status, statusText } = error.response
 
@@ -133,11 +133,7 @@ export default instance
 /**
  * GET 请求
  */
-export const useGet = <R = any, T = any>(
-  url: string,
-  params?: T,
-  config?: AxiosRequestConfig,
-): Promise<ResponseBody<R>> => {
+export function useGet<R = any, T = any>(url: string, params?: T, config?: AxiosRequestConfig): Promise<ResponseBody<R>> {
   return instance.request({
     url,
     params,
@@ -149,11 +145,7 @@ export const useGet = <R = any, T = any>(
 /**
  * POST 请求
  */
-export const usePost = <R = any, T = any>(
-  url: string,
-  data?: T,
-  config?: AxiosRequestConfig,
-): Promise<ResponseBody<R>> => {
+export function usePost<R = any, T = any>(url: string, data?: T, config?: AxiosRequestConfig): Promise<ResponseBody<R>> {
   return instance.request({
     url,
     data,
@@ -165,11 +157,7 @@ export const usePost = <R = any, T = any>(
 /**
  * PUT 请求
  */
-export const usePut = <R = any, T = any>(
-  url: string,
-  data?: T,
-  config?: AxiosRequestConfig,
-): Promise<ResponseBody<R>> => {
+export function usePut<R = any, T = any>(url: string, data?: T, config?: AxiosRequestConfig): Promise<ResponseBody<R>> {
   return instance.request({
     url,
     data,
@@ -181,11 +169,7 @@ export const usePut = <R = any, T = any>(
 /**
  * DELETE 请求
  */
-export const useDelete = <R = any, T = any>(
-  url: string,
-  data?: T,
-  config?: AxiosRequestConfig,
-): Promise<ResponseBody<R>> => {
+export function useDelete<R = any, T = any>(url: string, data?: T, config?: AxiosRequestConfig): Promise<ResponseBody<R>> {
   return instance.request({
     url,
     data,

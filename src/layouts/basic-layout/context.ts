@@ -1,11 +1,11 @@
-import { runEvent } from '@v-c/utils'
 import type { MenuSelectEvent, ProLayoutProps } from './typing'
+import { runEvent } from '@v-c/utils'
 
 export interface ProLayoutProviderMethods {
   handleCollapsed?: (collapsed: boolean) => void
 }
 
-const layoutStateFunc = (props: ProLayoutProps, methods: ProLayoutProviderMethods = {}) => {
+function layoutStateFunc(props: ProLayoutProps, methods: ProLayoutProviderMethods = {}) {
   const logo = computed(() => props.logo)
   const title = computed(() => props.title)
   const collapsed = computed(() => props.collapsed)
